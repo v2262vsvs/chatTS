@@ -43,7 +43,7 @@ function Chat() {
     const q = query(commentsRef, orderBy("timestamp"));
     const [messages, loading, error] = useCollection(q, { snapshotListenOptions: { includeMetadataChanges: true }, });
 
-    const q2 = query(commentsRef);
+    const q2 = query(collection(db, "users"));
     const [users2, loading2, error2] = useCollection(q2, { snapshotListenOptions: { includeMetadataChanges: true } }
     );
 
@@ -81,10 +81,10 @@ function Chat() {
             </div>
             <div className="flex-grow">
                 <div className="">
-                    {users2 && users2?.docs.map((user) => {
+                    { users2?.docs.map((user) => {
                         return (
-                            <div key={user.id} className=" inline-block mt-10 mb-10 bg-lime-300 rounded-xl w-5/12 ml-5 ">
-                                <form onSubmit={onSubmit} className="mt-5">
+                            <div key={user.id}  className=" inline-block mt-10 mb-10 bg-lime-300 rounded-xl w-5/12 ml-5 ">
+                                <form  className="mt-5">
                                     <div className="text-gray-700 font-bold text-xl text-center">User : {user.data().name}</div>
                                     {messages?.docs.map(comment => {
                                         return (
