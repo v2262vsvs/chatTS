@@ -1,9 +1,9 @@
 import React from 'react'
-import { addDoc, orderBy, deleteDoc, collection, doc, serverTimestamp } from "firebase/firestore";
+import { addDoc, orderBy,query, deleteDoc, collection, doc, serverTimestamp, Timestamp } from "firebase/firestore";
 import { db } from "../firebase"
 import { useState } from "react"
 import { TrashIcon } from '@heroicons/react/outline'
-import { query } from "firebase/database";
+import {  DatabaseReference } from "firebase/database";
 import { useCollection } from 'react-firebase-hooks/firestore';
 import Link from "next/link"
 import { User } from "../typings"
@@ -11,6 +11,23 @@ import { User } from "../typings"
 export interface Users {
     users: [User];
 }
+export interface Query2 {
+    readonly ref: DatabaseReference;
+    isEqual(other: Query | null): boolean;
+    toJSON(): string;
+}
+export declare interface Query{
+    readonly ref: DatabaseReference;
+    isEqual(other: Query | null): boolean;
+    toJSON(): string;
+    reference: string;
+     name: string; 
+     timestamp: Timestamp;
+    id: string, 
+    path :string, 
+    parent:string,
+    withConverter:string, 
+} 
 
 function Chat() {
 
@@ -21,12 +38,12 @@ function Chat() {
     const [newComment, setNewComment] = useState<string>("");
     const [thisUser, setThisUser] = useState<string>("");
 
-    const commentsRef = collection(db, "comments");
+    const commentsRef = collection(db, "comments")  ;
 
-    const q = query(collection(db, `comments`), orderBy("timestamp"));
+    const q = query(commentsRef, orderBy("timestamp"));
     const [messages, loading, error] = useCollection(q, { snapshotListenOptions: { includeMetadataChanges: true }, });
 
-    const q2 = query(collection(db, `users`));
+    const q2 = query(commentsRef);
     const [users2, loading2, error2] = useCollection(q2, { snapshotListenOptions: { includeMetadataChanges: true } }
     );
 
