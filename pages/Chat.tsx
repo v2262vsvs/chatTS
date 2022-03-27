@@ -54,6 +54,7 @@ function Chat() {
 
     const createUser = async () => {
         await addDoc(usersRef, { name: newUser });
+        setNewUser("")
     }
     const onSubmit = async (e: any) => {
         //console.log(newComment)
@@ -75,7 +76,7 @@ function Chat() {
     return (
         <div>
             <div className="text-center items-center mt-2">
-                <input onChange={(e) => setNewUser(e.target.value)} className="App ring-yellow-600 ring outline-none mr-3 rounded-xl p-2 " placeholder="Type the name" />
+                <input onChange={(e) => setNewUser(e.target.value)} className="App ring-yellow-600 ring outline-none mr-3 rounded-xl p-2 " value={newUser} placeholder="Type the name" />
                 <button className="bg-gray-200 rounded-full w-2/12 p-3 cursor-pointer hover:bg-gray-300" onClick={() => createUser()}>Add User</button>
             </div>
             <div className="flex-grow">
@@ -87,7 +88,7 @@ function Chat() {
                                     <div className="text-gray-700 font-bold text-xl text-center">User : {user.data().name}</div>
                                     {messages?.docs.map(comment => {
                                         return (
-                                            <div>
+                                            <div key={comment.id}>
                                                 {user.data().name == comment.data().name ? (
                                                     <div key={comment.id} className=' grid text-left   justify-items-end     bg-lime-200 rounded-xl w-10/12 ml-10 mt-3'>
                                                         {comment.data().reference &&
